@@ -27,6 +27,7 @@ class EyeTrackingCSV(torch.utils.data.Dataset):
       self.tokenizer = transformers.RobertaTokenizerFast.from_pretrained(model_name, add_prefix_space=True)
     elif 'bert' in model_name:
       self.tokenizer = transformers.BertTokenizerFast.from_pretrained(model_name, add_prefix_space=True)
+    self.texts = [[str(y) for y in x] for x in self.texts]
     self.ids = self.tokenizer(self.texts, padding=True, is_split_into_words=True, return_offsets_mapping=True)
 
 
@@ -46,6 +47,8 @@ class EyeTrackingCSV(torch.utils.data.Dataset):
     elif 'bert' in self.model_name:
       is_first_subword = [t0 == 0 and t1 > 0 for t0, t1 in offset_mapping]
 
+    #they do a mapping so they only put the real features on the real tokens, nos special tokens
+    #TODO: EXPLORE COMPROBING if it is special tokens or not
     features = -torch.ones((len(input_ids), 5))
     features[is_first_subword] = torch.Tensor(
       self.df[self.df.sentence_id == ix][FEATURES_NAMES].to_numpy()
