@@ -47,8 +47,8 @@ class EyeTrackingCSV(torch.utils.data.Dataset):
     elif 'bert' in self.model_name:
       is_first_subword = [t0 == 0 and t1 > 0 for t0, t1 in offset_mapping]
 
-    #they do a mapping so they only put the real features on the real tokens, nos special tokens
-    #TODO: EXPLORE COMPROBING if it is special tokens or not
+    # In cases where the original token is split into multiple RoBERTa tokens, we use the first RoBERTa token to make the prediction.
+    #I think that they consider that each token correspond to a word
     features = -torch.ones((len(input_ids), 5))
     features[is_first_subword] = torch.Tensor(
       self.df[self.df.sentence_id == ix][FEATURES_NAMES].to_numpy()

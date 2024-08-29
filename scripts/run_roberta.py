@@ -1,6 +1,5 @@
 import sys
-
-
+import torch
 import pandas as pd
 import argparse
 import pathlib
@@ -40,6 +39,6 @@ for ensemble_ix in range(args.num_ensembles):
     model_trainer.train(train_df, valid_df, num_epochs=150)
   else:
     model_trainer.train(train_df, num_epochs=120)
-  
+  torch.save(model_trainer.model, folder_name + '/models/model_' + str(ensemble_ix) + '.pth')
   predict_df = model_trainer.predict(valid_df)
   predict_df.to_csv(f"scripts/predict-{ensemble_ix}.csv", index=False)
