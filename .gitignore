@@ -1,4 +1,8 @@
 .ipynb_checkpoints
 .DS_Store
 *.pyc
+<<<<<<< HEAD
 models/
+=======
+model/model.pth
+>>>>>>> 8dd20ed642b544c98199107e315177928b1d2863
